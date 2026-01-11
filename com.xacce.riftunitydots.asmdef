@@ -1,0 +1,23 @@
+{
+  "name": "com.xacce.riftunitydots",
+  "rootNamespace": "",
+  "references": [
+    "Unity.Entities",
+    "Unity.Burst",
+    "Unity.Mathematics",
+    "Unity.Physics",
+    "Unity.Collections",
+    "Unity.Transforms",
+    "Unity.Entities.Hybrid",
+    "com.xacce.rift"
+  ],
+  "includePlatforms": [],
+  "excludePlatforms": [],
+  "allowUnsafeCode": true,
+  "overrideReferences": false,
+  "precompiledReferences": [],
+  "autoReferenced": true,
+  "defineConstraints": [],
+  "versionDefines": [],
+  "noEngineReferences": false
+}
