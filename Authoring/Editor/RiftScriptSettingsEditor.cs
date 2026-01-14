@@ -1,4 +1,5 @@
 ﻿#if UNITY_EDITOR
+using System;
 using System.Collections.Generic;
 using Unity.Transforms;
 using UnityEditor;
@@ -29,8 +30,14 @@ namespace Rift.Externals.Unity.Authoring.Editor
 			return root;
 		}
 
+		private void OnEnable()
+		{
+			SceneView.duringSceneGui += _OnSceneGUI;
+		}
+
 		private void OnDisable()
 		{
+			
 			//force save
 			Debug.Log("OnDisable");
 			foreach (var transformField in _transformFields)
@@ -38,7 +45,9 @@ namespace Rift.Externals.Unity.Authoring.Editor
 				transformField.Apply(serializedObject, false);
 				transformField.ClearHandles();
 			}
+
 			serializedObject.ApplyModifiedProperties();
+			SceneView.duringSceneGui -= _OnSceneGUI;
 		}
 
 		private void ClickEvent()
@@ -101,7 +110,7 @@ namespace Rift.Externals.Unity.Authoring.Editor
 			serializedObject.ApplyModifiedProperties();
 		}
 
-		private void OnSceneGUI()
+		private void _OnSceneGUI(SceneView sceneView)
 		{
 			if (!_extracted || _transformFields.Count == 0)
 				return;

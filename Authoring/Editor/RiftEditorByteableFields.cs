@@ -172,28 +172,6 @@ namespace Rift.Externals.Unity.Authoring.Editor
 			_editor = editor;
 		}
 
-		// public void SetPosition(Vector3 position)
-		// {
-		// 	_c.Position = position;
-		// 	Apply();
-		// }
-		//
-		// public void SetRotation(Quaternion rotation)
-		// {
-		// 	_c.Rotation = rotation;
-		// 	Apply();
-		// }
-		//
-		// public void SetScale(float scale)
-		// {
-		// 	_c.Scale = scale;
-		// 	Apply();
-		// }
-		//
-		// public LocalTransform GetTransform()
-		// {
-		// 	return _c;
-		// }
 
 		public override VisualElement Render(SerializedObject so)
 		{
@@ -222,6 +200,15 @@ namespace Rift.Externals.Unity.Authoring.Editor
 			// Get current value
 			var value = RiftScriptSettings.GetBlitValue<LocalTransform>(so, data.name);
 			_c = new LocalTransform { Position = value.Position, Rotation = value.Rotation, Scale = value.Scale };
+			if (_c.Rotation.value.Equals(float4.zero))
+			{
+				_c.Rotation = quaternion.identity;
+			}
+
+			if (_c.Scale == 0)
+			{
+				_c.Scale = 1f;
+			}
 
 			// Position field with label
 			var posContainer = new VisualElement();
@@ -234,7 +221,7 @@ namespace Rift.Externals.Unity.Authoring.Editor
 
 			var pos = new Vector3Field()
 			{
-				value = value.Position
+				value = _c.Position
 			};
 			pos.style.marginLeft = 8;
 			posContainer.Add(pos);
@@ -249,9 +236,10 @@ namespace Rift.Externals.Unity.Authoring.Editor
 			rotLabel.style.color = new Color(0.7f, 0.7f, 0.7f, 1f);
 			rotContainer.Add(rotLabel);
 
+
 			var rot = new Vector3Field()
 			{
-				value = math.degrees(Quaternion.ToEulerAngles(value.Rotation))
+				value = math.degrees(Quaternion.ToEulerAngles(_c.Rotation))
 			};
 			rot.style.marginLeft = 8;
 			rotContainer.Add(rot);
@@ -267,7 +255,7 @@ namespace Rift.Externals.Unity.Authoring.Editor
 
 			var scale = new FloatField()
 			{
-				value = value.Scale
+				value = _c.Scale
 			};
 			scale.style.marginLeft = 8;
 			scaleContainer.Add(scale);
@@ -316,9 +304,9 @@ namespace Rift.Externals.Unity.Authoring.Editor
 			_scaleEditing = false;
 		}
 
-		public void Apply(SerializedObject so,bool save=true)
+		public void Apply(SerializedObject so, bool save = true)
 		{
-			RiftScriptSettings.SetBlitValue(so, data.name, data.offset, _c,save);
+			RiftScriptSettings.SetBlitValue(so, data.name, data.offset, _c, save);
 		}
 
 		public void DrawSceneHandles(SerializedObject so)
@@ -335,38 +323,6 @@ namespace Rift.Externals.Unity.Authoring.Editor
 					_c.Position = newPosition;
 				}
 			}
-			// Refresh current value
-			// _c = RiftScriptSettings.GetBlitValue<LocalTransform>(so, data.name);
-			//
-			// // Draw position handle
-			// EditorGUI.BeginChangeCheck();
-			// Vector3 newPosition = Handles.PositionHandle(_c.Position, _c.Rotation);
-			// if (EditorGUI.EndChangeCheck())
-			// {
-			// 	Debug.Log($"Position changed {newPosition}");
-			// 	SetPosition(newPosition);
-			// }
-			//
-			// // Draw rotation handle
-			// EditorGUI.BeginChangeCheck();
-			// Quaternion newRotation = Handles.RotationHandle(_c.Rotation, _c.Position);
-			// if (EditorGUI.EndChangeCheck())
-			// {
-			// 	SetRotation(newRotation);
-			// }
-			//
-			// // Draw scale handle
-			// EditorGUI.BeginChangeCheck();
-			// Vector3 scaleVector = Vector3.one * _c.Scale;
-			// Vector3 newScaleVector = Handles.ScaleHandle(scaleVector, _c.Position, _c.Rotation, HandleUtility.GetHandleSize(_c.Position));
-			// if (EditorGUI.EndChangeCheck())
-			// {
-			// 	SetScale(newScaleVector.x);
-			// }
-			//
-			// // Draw label
-			// Vector3 labelOffset = new Vector3(0, HandleUtility.GetHandleSize(_c.Position) * 0.5f, 0);
-			// Handles.Label((Vector3)_c.Position + labelOffset, data.name);
 		}
 
 		public override void Write(DynamicBuffer<byte> buffer)
