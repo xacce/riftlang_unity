@@ -7,6 +7,12 @@ namespace Rift.UnityUnmanaged
 	{
 	}
 
+	
+	public struct RiftScriptLinkedEntity : ICleanupBufferElementData
+	{
+		public Entity value;
+	}
+
 	public struct RiftScriptRealtimeEditing : IComponentData
 	{
 		public Entity script;

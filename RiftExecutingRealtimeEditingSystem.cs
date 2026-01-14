@@ -1,5 +1,4 @@
-﻿#if UNITY_2020_1_OR_NEWER
-using Unity.Burst;
+﻿using Unity.Burst;
 using Unity.Collections;
 using Unity.Entities;
 
@@ -55,4 +54,3 @@ namespace Rift.UnityUnmanaged
 		}
 	}
 }
-#endif
