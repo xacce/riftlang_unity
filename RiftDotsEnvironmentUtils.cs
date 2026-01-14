@@ -1,4 +1,5 @@
 ﻿using Rift;
+using Rift.UnityUnmanaged;
 using Unity.Entities;
 using Unity.Mathematics;
 
@@ -27,6 +28,11 @@ namespace Rift.Externals.Unity
 					compiler.RegisterStructRecursive(type.Type);
 				}
 			}
+		}
+
+		public static void SetupUtils(IRiftCompiler compiler)
+		{
+			compiler.RegisterStructRecursive(typeof(RiftLocalized));
 		}
 
 		public static void SetupMathTypes(IRiftCompiler compiler)

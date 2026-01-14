@@ -1,13 +1,18 @@
-﻿#if UNITY_2020_1_OR_NEWER
-using Unity.Entities;
+﻿using Unity.Entities;
 
 namespace Rift.UnityUnmanaged
 {
+	public struct RiftLocalized
+	{
+		public ulong table;
+		public ulong key;
+	}
+
 	public struct RiftScriptInvalidate : IComponentData
 	{
 	}
 
-	
+
 	public struct RiftScriptLinkedEntity : ICleanupBufferElementData
 	{
 		public Entity value;
@@ -57,4 +62,3 @@ namespace Rift.UnityUnmanaged
 	{
 	}
 }
-#endif

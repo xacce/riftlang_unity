@@ -81,6 +81,9 @@ namespace Rift.Externals.Unity.Authoring.Editor
 						break;
 					case RiftCompiledOpCode.Int:
 						_fields.Add(new RiftEditorByteableIntField(script, pair.Value).Render(serializedObject));
+						break;		
+					case RiftCompiledOpCode.Uint:
+						_fields.Add(new RiftEditorByteableUIntField(script, pair.Value).Render(serializedObject));
 						break;
 					case RiftCompiledOpCode.Float:
 						_fields.Add(new RiftEditorByteableFloatField(script, pair.Value).Render(serializedObject));
