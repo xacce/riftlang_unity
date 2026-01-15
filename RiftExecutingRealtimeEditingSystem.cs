@@ -1,10 +1,13 @@
 ﻿using Unity.Burst;
 using Unity.Collections;
 using Unity.Entities;
+using Unity.Transforms;
 
 namespace Rift.UnityUnmanaged
 {
 	[BurstCompile]
+	[UpdateInGroup(typeof(SimulationSystemGroup))]
+	[UpdateAfter(typeof(TransformSystemGroup))]
 	public partial struct RiftExecutingRealtimeEditingSystem : ISystem
 	{
 		private EntityQuery _proxed;

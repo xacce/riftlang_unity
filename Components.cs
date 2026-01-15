@@ -51,6 +51,7 @@ namespace Rift.UnityUnmanaged
 	public struct RiftScriptComponent : IComponentData
 	{
 		public long bakeHash;
+		public byte cleanRequired;
 	}
 
 	public struct RiftScriptMetaComponent : IComponentData

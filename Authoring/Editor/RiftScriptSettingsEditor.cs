@@ -37,9 +37,6 @@ namespace Rift.Externals.Unity.Authoring.Editor
 
 		private void OnDisable()
 		{
-			
-			//force save
-			Debug.Log("OnDisable");
 			foreach (var transformField in _transformFields)
 			{
 				transformField.Apply(serializedObject, false);
