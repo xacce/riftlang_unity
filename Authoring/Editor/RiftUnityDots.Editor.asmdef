@@ -1,0 +1,24 @@
+{
+    "name": "RiftUnityDots.Editor",
+    "rootNamespace": "",
+    "references": [
+      "Unity.Entities",
+      "Unity.Burst",
+      "Unity.Mathematics",
+      "Unity.Physics",
+      "Unity.Collections",
+      "Unity.Transforms",
+      "Unity.Entities.Hybrid",
+      "com.xacce.rift",
+      "com.xacce.riftunitydots"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": true,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "noEngineReferences": false
+}

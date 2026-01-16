@@ -1,8 +1,4 @@
-﻿using Rift;
-using Rift.Externals.Unity.Authoring;
-using Rift.Externals.Unity.Authoring.Editor;
-using Unity.Entities;
-using UnityEditor;
+﻿using UnityEditor;
 using UnityEngine.UIElements;
 
 namespace Rift.Externals.Unity.Authoring.Editor
