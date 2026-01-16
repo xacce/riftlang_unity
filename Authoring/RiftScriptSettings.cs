@@ -1,16 +1,17 @@
-﻿using System;
+﻿#if UNITY_EDITOR
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
-using Rift;
-using Rift.Externals.Unity.Authoring;
 using Rift.UnityUnmanaged;
 using Unity.Collections;
 using Unity.Collections.LowLevel.Unsafe;
 using Unity.Entities;
-using UnityEditor;
 using UnityEngine;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 using UnityEngine.Serialization;
 
 namespace Rift.Externals.Unity.Authoring
@@ -289,3 +290,4 @@ namespace Rift.Externals.Unity.Authoring
 		// }
 	}
 }
+#endif

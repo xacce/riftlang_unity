@@ -1,10 +1,9 @@
-﻿#if UNITY_2020_1_OR_NEWER
-using Rift;
-using Rift.Externals.Unity.Authoring;
-using Rift.UnityUnmanaged;
+﻿using Rift.UnityUnmanaged;
 using Unity.Collections;
 using Unity.Entities;
+#if UNITY_EDITOR
 using UnityEditor;
+#endif
 using UnityEngine;
 
 namespace Rift.Externals.Unity.Authoring
@@ -14,7 +13,7 @@ namespace Rift.Externals.Unity.Authoring
 	{
 		[HideInInspector] [SerializeField] private RiftScriptSerializable m_script;
 		[TextArea(50, 1000)] [SerializeField] public string code;
-
+#if UNITY_EDITOR
 		public RiftCompiler Bake(IBaker baker, RiftScriptSettings settings, Entity t, IRiftEnvironment environment)
 		{
 			var compiler = Compile(environment);
@@ -42,6 +41,6 @@ namespace Rift.Externals.Unity.Authoring
 			EditorUtility.SetDirty(this);
 			return compiler;
 		}
+#endif
 	}
 }
-#endif
