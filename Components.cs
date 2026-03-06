@@ -1,4 +1,6 @@
-﻿using Unity.Entities;
+﻿using System;
+using Unity.Collections;
+using Unity.Entities;
 
 namespace Rift.UnityUnmanaged
 {
@@ -29,6 +31,20 @@ namespace Rift.UnityUnmanaged
 		public byte value;
 	}
 
+	[InternalBufferCapacity(0)]
+	public struct RiftDebugSettingsVariable : IBufferElementData, IEquatable<RiftDebugSettingsVariable>
+	{
+		public int offset;
+		public FixedString128Bytes name;
+		public FixedString128Bytes typeName;
+		public RiftCompiledOpCode type;
+
+		public bool Equals(RiftDebugSettingsVariable other)
+		{
+			return offset == other.offset && name.Equals(other.name) && type == other.type;
+		}
+	}
+
 	[InternalBufferCapacity(512)] //todo research perf
 	public struct RiftBlitVariables : IBufferElementData
 	{
@@ -56,7 +72,6 @@ namespace Rift.UnityUnmanaged
 
 	public struct RiftScriptMetaComponent : IComponentData
 	{
-		public RiftScriptMeta value;
 	}
 
 	public struct RiftScriptExecuting : IComponentData

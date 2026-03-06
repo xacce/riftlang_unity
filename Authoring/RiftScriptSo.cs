@@ -13,20 +13,46 @@ namespace Rift.Externals.Unity.Authoring
 	{
 		[HideInInspector] [SerializeField] private RiftScriptSerializable m_script;
 		[TextArea(50, 1000)] [SerializeField] public string code;
+
 #if UNITY_EDITOR
-		public RiftCompiler Bake(IBaker baker, RiftScriptSettings settings, Entity t, IRiftEnvironment environment)
+		public unsafe RiftCompiler Bake(IBaker baker, RiftScriptSettings settings, Entity t, IRiftEnvironment environment)
 		{
 			var compiler = Compile(environment);
-			baker.AddBuffer<RiftBlitByteCode>(t).Reinterpret<byte>().AddRange(new NativeArray<byte>(m_script.bytecode, Allocator.Temp));
-			baker.AddBuffer<RiftBlitVariables>(t).Reinterpret<byte>().AddRange(new NativeArray<byte>(m_script.meta.variablesSize, Allocator.Temp));
-			var blitSettingsBuffer = baker.AddBuffer<RiftBlitSettings>(t).Reinterpret<byte>();
-			var gameObjectBuffer = baker.AddBuffer<RiftEntitySetting>(t);
-			blitSettingsBuffer.ResizeUninitialized(m_script.meta.settingsSize);
-			settings.WriteBlit(blitSettingsBuffer.AsNativeArray());
-			settings.WriteEntities(baker, gameObjectBuffer);
+			fixed (byte* p = m_script.bytecode)
+			{
+				var meta = RiftInterpret<RiftMem, RiftMem>.ExtractMetaAtStart(p);
+				baker.AddBuffer<RiftBlitByteCode>(t).Reinterpret<byte>().AddRange(new NativeArray<byte>(m_script.bytecode, Allocator.Temp));
+				baker.AddBuffer<RiftBlitVariables>(t).Reinterpret<byte>().AddRange(new NativeArray<byte>(meta.memSize, Allocator.Temp));
+				var blitSettingsBuffer = baker.AddBuffer<RiftBlitSettings>(t).Reinterpret<byte>();
+				var gameObjectBuffer = baker.AddBuffer<RiftEntitySetting>(t);
 
-			baker.AddComponent(t, new RiftScriptMetaComponent { value = m_script.meta });
+
+				blitSettingsBuffer.ResizeUninitialized(meta.settingsSize);
+				settings.WriteBlit(blitSettingsBuffer.AsNativeArray());
+				settings.WriteEntities(baker, gameObjectBuffer);
+				baker.AddComponent(t, new RiftScriptMetaComponent { });
+			}
+
 			return compiler;
+		}
+
+		public RiftCompiler Bake(IBaker baker, Entity t, byte[] settings, IRiftEnvironment environment)
+		{
+			unsafe
+			{
+				var compiler = Compile(environment);
+				fixed (byte* p = m_script.bytecode)
+				{
+					var meta = RiftInterpret<RiftMem, RiftMem>.ExtractMetaAtStart(p);
+					baker.AddBuffer<RiftBlitByteCode>(t).Reinterpret<byte>().AddRange(new NativeArray<byte>(m_script.bytecode, Allocator.Temp));
+					baker.AddBuffer<RiftBlitVariables>(t).Reinterpret<byte>().AddRange(new NativeArray<byte>(meta.memSize, Allocator.Temp));
+					baker.AddComponent(t, new RiftScriptMetaComponent { });
+					var blitSettingsBuffer = baker.AddBuffer<RiftBlitSettings>(t).Reinterpret<byte>();
+					blitSettingsBuffer.ResizeUninitialized(meta.settingsSize);
+					NativeArray<byte>.Copy(settings, 0, blitSettingsBuffer.AsNativeArray(), 0, settings.Length);
+					return compiler;
+				}
+			}
 		}
 
 		public RiftCompiler Compile(IRiftEnvironment environment)
