@@ -38,7 +38,9 @@ namespace Rift.Externals.Unity.Authoring
 			public ulong typHash;
 		}
 
+		
 		public RiftScriptSo script;
+
 		[FormerlySerializedAs("settings")] public List<SerializedBlitValue> blit = new List<SerializedBlitValue>();
 		public List<SerializedGameObjectValue> gameObjects = new List<SerializedGameObjectValue>();
 
@@ -110,7 +112,7 @@ namespace Rift.Externals.Unity.Authoring
 
 				string fieldName = fieldNameProperty.stringValue;
 				var typHash = typHashProperty.ulongValue;
-				
+
 				if (!scriptSettings.TryGetValue(fieldName, out var cur) || typHash != GetTypeHash(cur.type))
 				{
 					blitArray.DeleteArrayElementAtIndex(i);
@@ -131,7 +133,7 @@ namespace Rift.Externals.Unity.Authoring
 				SerializedProperty offsetProp = goElement.FindPropertyRelative("offset");
 				string fieldName = fieldNameProperty.stringValue;
 				ulong typHash = typHashProperty.ulongValue;
-				
+
 
 				if (!scriptSettings.TryGetValue(fieldName, out var cur) || typHash != GetTypeHash(cur.type))
 				{
@@ -225,7 +227,7 @@ namespace Rift.Externals.Unity.Authoring
 			return default(T);
 		}
 
-		public static unsafe void SetBlitValue<T>(SerializedObject serializedObject, string fname, int offset, T value,bool save=true) where T : unmanaged
+		public static unsafe void SetBlitValue<T>(SerializedObject serializedObject, string fname, int offset, T value, bool save = true) where T : unmanaged
 		{
 			SerializedProperty blitArray = serializedObject.FindProperty("blit");
 			for (int i = 0; i < blitArray.arraySize; i++)
