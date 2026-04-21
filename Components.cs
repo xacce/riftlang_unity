@@ -14,6 +14,16 @@ namespace Rift.UnityUnmanaged
 	{
 	}
 
+	public struct RiftRuntime : IComponentData
+	{
+		public int callStackDepth;
+	}
+
+	[InternalBufferCapacity(RiftCallConfig.RIFT_CALL_STACK_MAX)]
+	public struct RiftCallStackElement : IBufferElementData
+	{
+		public RiftCallFrame value;
+	}
 
 	public struct RiftScriptLinkedEntity : ICleanupBufferElementData
 	{
@@ -57,7 +67,7 @@ namespace Rift.UnityUnmanaged
 		public byte value;
 	}
 
-	[InternalBufferCapacity(3)] //todo research perf
+	[InternalBufferCapacity(0)]
 	public struct RiftEntitySetting : IBufferElementData
 	{
 		public Entity value;
@@ -68,6 +78,7 @@ namespace Rift.UnityUnmanaged
 	{
 		public long bakeHash;
 		public byte cleanRequired;
+		public byte initialized;
 	}
 
 	public struct RiftScriptMetaComponent : IComponentData
