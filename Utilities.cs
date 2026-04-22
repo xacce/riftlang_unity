@@ -22,7 +22,18 @@ namespace Rift.UnityUnmanaged
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static unsafe void Update(ref DynamicBuffer<RiftBlitSettings> settings, in DynamicBuffer<RiftEntitySetting> links)
 		{
-			var settingsRaw = (byte*)settings.Reinterpret<byte>().AsNativeArray().GetUnsafePtr();
+			byte* settingsRaw = (byte*)settings.Reinterpret<byte>().GetUnsafePtr();
+			for (int i = 0; i < links.Length; i++)
+			{
+				*(Entity*)(settingsRaw + links[i].offset) = links[i].value;
+			}
+		}
+
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public static unsafe void Update<T>(ref DynamicBuffer<RiftBlitSettings> settings, in DynamicBuffer<RiftEntitySetting> links, T owner) where T : unmanaged
+		{
+			byte* settingsRaw = (byte*)settings.Reinterpret<byte>().GetUnsafePtr();
+			*(T*)(settingsRaw) = owner;
 			for (int i = 0; i < links.Length; i++)
 			{
 				*(Entity*)(settingsRaw + links[i].offset) = links[i].value;

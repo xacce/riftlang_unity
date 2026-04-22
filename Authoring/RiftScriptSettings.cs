@@ -84,6 +84,11 @@ namespace Rift.Externals.Unity.Authoring
 			for (int i = 0; i < sorted.Count; i++)
 			{
 				var setting = sorted[i];
+				if (setting.fieldName == "self")
+				{
+					continue;
+				}
+
 				buffer.Add(new RiftEntitySetting { value = baker.GetEntity(setting.gameObject, TransformUsageFlags.None), offset = setting.offset });
 			}
 		}
